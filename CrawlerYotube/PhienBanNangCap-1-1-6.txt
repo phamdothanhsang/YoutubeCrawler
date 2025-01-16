@@ -1,0 +1,15 @@
+# Update 19.05.2023
+
+1. Thu gọn code lại theo chuẩn 
+
+# Update 20.05.2023
+
+1. Thêm được Function kiểm tra nếu kết nối mạng bị lỗi, không tải được video, có thể thoát vòng lặp
+
+" checkVideoHaveDownload_Have_Error_or_Not "
+
+# Update 22.05.2023
+
+1. Update thêm tính năng tắt trình duyệt bằng mouse
+
+Note nâng cấp thêm: phần Scroll để tải hết Video của 1 kênh

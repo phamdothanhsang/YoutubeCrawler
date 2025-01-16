@@ -1,0 +1,49 @@
+﻿Luồng Dữ liệu chạy trong chương trình 
+
+Chạy câu lệnh trên cmd từ thư mục code để cài đặt các thư viện cần thiết: pip install -r requirements.txt 
+=> Sau đó đăng nhập 1 tài khoản bất kỳ trước trên trình duyệt Chrome và tắt tab đó đi, vẫn dữ nguyên trình duyệt
+=> Mở run => bấm ok
+
+Cài đặt NodeJS v14.17.3 (Co' Link google drive: https://drive.google.com/file/d/1XZldS9Vpu-kZOnsgX3T0_THXD3qw_YL3/view?usp=share_link )
+
+Cài đặt: ffmpeg => https://www.gyan.dev/ffmpeg/builds/ 
+
+	=> pip install ffmpeg
+
+Quy trình hoạt động của Soft này:
+
+Bước 1: Cần đăng nhập vào 1 nick trên YouTube ( Để sử dụng tải các video xuống ) 
++ Phải chuyển ngôn ngữ Youtube thành Tiếng Việt
+
+Bước 2: Mở sẵn CocCoc lên ( như hình ) 
+
+#
+
+Bước 3: Khi chạy chương trình , soft sẽ lấy dữ liệu User cần tải video về tại file ( " listUserNeedCrawVideo.txt " ),
+tại đây bạn có thể thêm các thông tin của user theo chuẩn ( Channel Config ID /+/ Tên Kênh /+/ cách muốn tải ( all: tải hết video trên trang ) hoặc ( daily: sẽ tải tầm 30 video mới nhất ) 
+
+Bước 4: Sau đó Soft sẽ lấy dữ liệu ( Channel Config ID + Tên Kênh ) tại bước 3, để vào trang User, để lấy thông tin video trên kênh và so sánh trong dữ liệu lịch sử đã video đã tải tại file " listDownloadedVideos.txt "
+tại đây thông tin được định dạng như sau ( Channel Config ID /+/ Tên Kênh /+/ ID Video /+/ Title Video /+/ Hashtag(Keyword) /+/ Thời gian tải video ). Tại đây sau khi soft so sánh và kiểm tra nếu Video nào chưa có trong list, có nghĩa chưa
+được tải, Soft sẽ chạy tới bước tiếp theo là bắt đầu tải Video và upload lên Database.
+
+Bước 5: Soft bắt đầu chạy Function để tải video như sau:
+ - Video được tải, đầu tiên sẽ đưa vào thư mục "uploadConvertVideo" và ghi thông tin video vào file " uploadedAndDeletedInfo.txt " 
+ => Tại đây Function sẽ chạy chương trình trên thông tin lấy tại "uploadedAndDeletedInfo.txt" để chạy soft trong thư mục "S3Weallnet" giúp sử lý upload Video lên S3 sau đó trả về 1 link URL S3 video mới để ta có thể upload lên Database chính.
+ => Nếu Video được upload thành công, soft sẽ di chuyển File Video đó sang thư mục " videoDownload_data " để lưu lại. Đồng thời cũng ghi thông tin video đó vào " listDownloadedVideos.txt "
+ => Nếu Video không được upload thành công, soft sẽ di chuyển Video đó sang thư mục " failedUploadVideos " để lưu lại. Đồng thời cũng ghi thông tin video đó vào " unavailableVideosList.txt"\
+
+# ------------------------------------- /
+
+Cấu trúc file ( listUserNeedCrawVideo.txt )
+
+channel config /+/ user name /+/ kind for craw: daily / all /+/ Day Time /+/ default_ribbon /+/ default_keyword
+
+# ------------------------------------- /
+
+Cấu trúc file ( uploadedAndDeletedInfo.txt )
+
+title Video /+/ description /+/ Id Video /+/ keyword Video /+/ channelConfigID /+/ defaultRibbon /+/ defaultKeyword
+
+# ------------------------------------- /
+
+Cách reset lại các lệnh Git, xóa các lệnh lỡ chạy: " del .git\index.lock "
