@@ -20,7 +20,11 @@ from transcode_api import *
 import cv2
 from pytube import YouTube
 from pytube.exceptions import PytubeError
+import yt_dlp 
 
+
+os.environ['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
+ 
 # Tại đây khởi tạo các giá trị hỗ trợ chạy xuyên suốt chương trình
 
 urlChrome = "C:/Program Files/CocCoc/Browser/Application/browser.exe %s" # Trinh` duyet open link video
@@ -178,46 +182,63 @@ def check_Status_Download_Video(File_Path_Input):
             return True
             
 # Hàm hỗ trợ tải Video xuống như bấm vào Download nhưng nhanh hơn nhiều
-def tool_Help_Run_Download_Video(video_Url_Input):
+# def tool_Help_Run_Download_Video(video_Url_Input):
     
-    try:
-        # Đường dẫn đến video YouTube bạn muốn tải
-        video_Url_Input = str(video_Url_Input)
+#     try:
+#         # Đường dẫn đến video YouTube bạn muốn tải
+#         video_Url_Input = str(video_Url_Input)
 
-        # Tạo đối tượng YouTube
-        yt = YouTube(video_Url_Input)
+#         # Tạo đối tượng YouTube
+#         yt = YouTube(video_Url_Input)
 
-        # Kiểm tra nếu không thể truy cập tiêu đề
-        if 'videoDetails' not in yt.vid_info:
-            print("Không thể truy cập videoDetails. Có thể YouTube đã thay đổi API.")
-            return False
+#         # Kiểm tra nếu không thể truy cập tiêu đề
+#         if 'videoDetails' not in yt.vid_info:
+#             print("Không thể truy cập videoDetails. Có thể YouTube đã thay đổi API.")
+#             return False
 
-        # Lấy thông tin về video
-        print("Tiêu đề:", yt.title)
-        print("Thời lượng (giây):", yt.length)
+#         # Lấy thông tin về video
+#         print("Tiêu đề:", yt.title)
+#         print("Thời lượng (giây):", yt.length)
 
-    # Chọn định dạng và chất lượng tải xuống
-    # Chọn định dạng và chất lượng tải xuống
-    # Ví dụ: chọn định dạng mp4 và chất lượng cao nhất
-        # Chọn định dạng và chất lượng tải xuống
-    # Ví dụ: chọn định dạng mp4 và chất lượng cao nhất
-        video_stream = yt.streams.get_highest_resolution()
+#     # Chọn định dạng và chất lượng tải xuống
+#     # Chọn định dạng và chất lượng tải xuống
+#     # Ví dụ: chọn định dạng mp4 và chất lượng cao nhất
+#         # Chọn định dạng và chất lượng tải xuống
+#     # Ví dụ: chọn định dạng mp4 và chất lượng cao nhất
+#         video_stream = yt.streams.get_highest_resolution()
 
-        # Tải video xuống
-        output_path = 'uploadConvertVideo'
-        video_stream.download(output_path=output_path)
+#         # Tải video xuống
+#         output_path = 'uploadConvertVideo'
+#         video_stream.download(output_path=output_path)
             
-        print("\nVideo đã được tải xuống và lưu tại:", output_path)
+#         print("\nVideo đã được tải xuống và lưu tại:", output_path)
     
+#         return True
+
+#     except PytubeError as e:
+#         print(f"Lỗi Pytube: {e}")
+#         return False
+#     except Exception as e:
+#         print(f"Lỗi không xác định: {e}")
+#         return False
+
+
+def tool_Help_Run_Download_Video(video_Url_Input):
+    try:
+        output_path = 'uploadConvertVideo'
+        ydl_opts = {
+            'format': 'best',  # Chọn định dạng tốt nhất
+            'outtmpl': f'{output_path}/%(title)s.%(ext)s',  # Định dạng tên file
+        }
+
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            ydl.download([video_Url_Input])
+
+        print("Video đã được tải xuống thành công.")
         return True
-
-    except PytubeError as e:
-        print(f"Lỗi Pytube: {e}")
-        return False
     except Exception as e:
-        print(f"Lỗi không xác định: {e}")
+        print(f"Lỗi khi tải video: {e}")
         return False
-
 # Hàm hiển thị % khi đang tải Video
 def on_Progress_Download_Video(stream, chunk, remaining):
     # Tính phần trăm hoàn thành tải
@@ -856,32 +877,75 @@ def scrollMouse():
     time.sleep(0.5)
     pyautogui.scroll(-value_random_when_scroll_mouse_down)
 
-def mouseCursorPositioning(imglink, title, x, y):
+# def mouseCursorPositioning(imglink, title, x, y):
     
-    # Đang sử dụng cho màn hình 1024*720
+#     # Đang sử dụng cho màn hình 1024*720
 
-    print(title)
+#     print(title)
 
-    for i in range(10):
+#     for i in range(10):
 
-        time.sleep(0.25)
+#         time.sleep(0.25)
 
-        print("Loading check icon ... => ", i)
+#         print("Loading check icon ... => ", i)
         
-        if functionCheckIconHaveOrNot(imglink) == True:
+#         if functionCheckIconHaveOrNot(imglink) == True:
 
-            for pix_mop in pyautogui.locateAllOnScreen(imgUrl + imglink, confidence=confidenceImg,region=(0, 0, areaDisplayPC[0], areaDisplayPC[1])):
-                print("==> Click")
-                x = pix_mop[0] + x
-                y = pix_mop[1] + y
-                moveMousePosition(x, y)
-                time.sleep(round(float(random.uniform(1, 2)), 2))
-                leftClick()
-                time.sleep(round(float(random.uniform(1, 2)), 2))
-                # ==>
-                break
+#             for pix_mop in pyautogui.locateAllOnScreen(imgUrl + imglink, confidence=confidenceImg,region=(0, 0, areaDisplayPC[0], areaDisplayPC[1])):
+#                 print("==> Click")
+#                 x = pix_mop[0] + x
+#                 y = pix_mop[1] + y
+#                 moveMousePosition(x, y)
+#                 time.sleep(round(float(random.uniform(1, 2)), 2))
+#                 leftClick()
+#                 time.sleep(round(float(random.uniform(1, 2)), 2))
+#                 # ==>
+#                 break
 
-            break
+#             break
+
+def mouseCursorPositioning(imglink, title, x, y):
+    print(f"Starting: {title}")
+    print(f"Looking for image: {imglink}")
+
+    for i in range(10):  # Retry up to 10 times
+        time.sleep(0.25)
+        print(f"Attempt {i+1}: Checking for icon...")
+
+        if functionCheckIconHaveOrNot(imglink):
+            print("Icon found, locating position...")
+            
+            try:
+                matches = list(pyautogui.locateAllOnScreen(
+                    imgUrl + imglink, 
+                    confidence=0.7,  # Adjust confidence as needed
+                    region=(0, 0, areaDisplayPC[0], areaDisplayPC[1])
+                ))
+                
+                if not matches:
+                    print("No matches found on screen.")
+                    continue
+
+                for pix_mop in matches:
+                    print(f"Icon located at: {pix_mop}")
+                    x_new = pix_mop[0] + x
+                    y_new = pix_mop[1] + y
+                    print(f"Moving mouse to: ({x_new}, {y_new})")
+                    moveMousePosition(x_new, y_new)
+                    time.sleep(round(float(random.uniform(1, 2)), 2))
+                    print("Performing left click...")
+                    leftClick()
+                    time.sleep(round(float(random.uniform(1, 2)), 2))
+                    break  # Stop after the first match
+
+            except pyautogui.ImageNotFoundException:
+                print("ImageNotFoundException: Could not locate the image.")
+
+            break  # Exit retry loop after finding the image
+    else:
+        print(f"Failed to find image: {imglink} after 10 attempts.")
+
+
 
 def mouseCursorPositioningNotClick(imglink, title, x, y):
     
@@ -913,14 +977,26 @@ def timeCheckNow():
     string_time = " " + formatted_time + " "
     return (string_time)
 
-def functionCheckIconHaveOrNot(url_img):
-    
-    # Soft chay tren display 1024 * 768 Small Screen | Có thể thay đổi ở màn hình khác
-    
-    if pyautogui.locateOnScreen(imgUrl + url_img, region=(0, 0, areaDisplayPC[0], areaDisplayPC[1]),
-    confidence=confidenceImg) != None: return(True) 
-    
-    else: return(False)
+def functionCheckIconHaveOrNot(imglink):
+    print(f"Looking for image: {imglink}")
+    retries = 10  # Number of retries
+    for attempt in range(retries):
+        try:
+            print(f"Attempt {attempt + 1}/{retries}")
+            match = pyautogui.locateOnScreen(
+                imgUrl + imglink, 
+                confidence=0.7, 
+                region=(0, 0, areaDisplayPC[0], areaDisplayPC[1])
+            )
+            if match:
+                print(f"Image found at: {match}")
+                return True
+        except pyautogui.ImageNotFoundException:
+            print("Image not found. Retrying...")
+        time.sleep(0.5)  # Add a delay between retries
+    print("Failed to locate image after retries.")
+    return False
+
 
 # Hàm hỗ trợ xóa giá trị trong file Txt
 def clear_File_uploadedAndDeletedInfo(file_Path):
